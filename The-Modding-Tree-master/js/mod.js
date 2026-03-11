@@ -12,11 +12,16 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.02",
-	name: "fertilizer comes after fruits though",
+	num: "0.03",
+	name: "the leaves are finally alive!",
 }
 
 let changelog = `<h1>Changelog:</h1><br>
+	<h3>v0.03: the leaves are finally alive!</h3><br>
+	<h4>3/11/26</h4>
+		- Added Falling leaves.<br>
+		- Added more upgrades, yippee!<br>
+		- Endgame: 1e13 Leaves<br><br>
 	<h3>v0.02: fertilizer comes after fruits though</h3><br>
 	<h4>3/10/26</h4>
 		- Added Fertilizer.<br>
@@ -59,6 +64,8 @@ function getPointGen() {
 	if (hasUpgrade('F', 11)) gain = gain.times(2)
 	if (hasUpgrade('F', 12)) gain = gain.times(2.5)
 	if (hasUpgrade('F', 13)) gain = gain.times(upgradeEffect('F', 13))
+
+	if (hasUpgrade('FL', 11)) gain = gain.times(upgradeEffect('FL', 11))
 	return gain
 }
 

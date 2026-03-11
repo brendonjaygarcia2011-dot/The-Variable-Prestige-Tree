@@ -40,11 +40,13 @@ addLayer("DL", {
         title: "Dead leaves are technically fertilizer.",
         description: "Double leaf gain.",
         cost: new Decimal(2),
+        unlocked() { return hasUpgrade('DL', 11) }
         },
         13: {
         title: "i ate thwe ded levez :(",
         description: "Triple leaf gain.",
         cost: new Decimal(5),
+        unlocked() { return hasUpgrade('DL', 12) }
         },
         14: {
         title: "my friend ased for this",
@@ -54,6 +56,7 @@ addLayer("DL", {
         return player[this.layer].points.add(1).pow(0.25)
         },
         effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" },
+        unlocked() { return hasUpgrade('DL', 13) }
         },
         15: {
         title: "That means, more leaf = more dead leaf = more leaf",
@@ -68,13 +71,14 @@ addLayer("DL", {
         return mult
         },
         effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" },
+        unlocked() { return hasUpgrade('DL', 14) },
         },
         21: {
         title: "Back 2 Leaf Basics",
         description: "Fertilizer boosts Dead Leaf gain.",
         cost: new Decimal(100),
         unlocked() { 
-            return hasUpgrade('F', 12) 
+            return hasUpgrade('F', 12) && hasUpgrade('DL', 15)
         },
         effect() {
         return player["F"].points.add(1).pow(0.65)
@@ -86,7 +90,7 @@ addLayer("DL", {
         description: "Dead Leaf boosts Leaves (again.)",
         cost: new Decimal(250),
         unlocked() { 
-            return hasUpgrade('F', 12) 
+            return hasUpgrade('F', 12)  && hasUpgrade('DL', 15)
         },
         effect() {
         return player["DL"].points.add(1).pow(0.30)
@@ -98,7 +102,7 @@ addLayer("DL", {
         description: "*8 Leaves, and Fertilizer boosts Leaves.",
         cost: new Decimal(20000),
         unlocked() { 
-            return hasUpgrade('F', 12) 
+            return hasUpgrade('F', 12) && hasUpgrade('DL', 15)
         },
         effect() {
         return player["F"].points.add(1).pow(0.40)
@@ -181,9 +185,10 @@ addLayer("FL", {
     baseAmount() {return player.DL.points}, // Get the current amount of baseResource
     type: "static", // normal: cost to gain currency depends on amount gained. static: cost depends on how much you already have
     base: 10,
-    exponent: 1.2, // Prestige currency exponent
+    exponent: 1.3, // Prestige currency exponent
     gainMult() { // Calculate the multiplier for main currency from bonuses
         mult = new Decimal(1)
+        if (hasUpgrade('FL', 12)) mult = mult.divide(upgradeEffect('FL', 12))
         return mult
     },
     gainExp() { // Calculate the exponent on main currency from bonuses
@@ -195,4 +200,24 @@ addLayer("FL", {
     ],
     layerShown() { return hasUpgrade("F", 14) 
     },
+    upgrades: {
+        11: {
+        title: "1 fallen leaf costs a lot",
+        description: "Fallen Leaf boosts Leaves.",
+        cost: new Decimal(1),
+        effect() {
+            return Decimal.pow(2, player["FL"].points)
+        },
+        effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" },
+        },
+        12: {
+        title: "2 fallen leaf costs a lot lot",
+        description: "Fertilizer boosts Fallen Leaves.",
+        cost: new Decimal(2),
+        effect() {
+            return player.F.points.add(1).pow(0.30)
+        },
+        effectDisplay() { return format(upgradeEffect(this.layer, this.id))+"x" },
+        }
+    }
 })
